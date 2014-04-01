@@ -29,12 +29,9 @@ $(shell mkdir -p bin)
 
 all:	$(EXEC)
 
-#On crée les objets à partir des source, 
-#On ajoute une dépendence avec le fichiers d'entête correspondant.
 bin/%.o: src/%.cpp src/%.h
 		$(CC) $(CXXFLAGS) $@ $<
-		
-#Meme chose qu'au dessu sauf qu'on compile quand meme si le source n'a pas d'entête.
+
 bin/%.o: src/%.cpp
 		$(CC) $(CXXFLAGS) $@ $<
 

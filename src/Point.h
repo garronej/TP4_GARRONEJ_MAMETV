@@ -9,6 +9,7 @@
 #define POINT_H
 #include <iostream> //Pour cout
 #include <cassert> //Pour les assert.
+#include <stdexcept>
 
 template <typename T>
 class Point{
@@ -61,5 +62,17 @@ class Point{
 		T m_y;
 };
 
-#endif
+/* IMPLEMENTAITION */
 
+template< typename T > struct TypeIsFloat{ static const bool value = false; };
+template< typename T > struct TypeIsDouble{ static const bool value = false; };
+
+template<> struct TypeIsFloat< float >{ static const bool value = true; };
+template<> struct TypeIsDouble< double >{ static const bool value = true; };
+
+template<typename T> Point<T>::Point(T x,T y){
+	if ( !TypeIsFloat<T>::value && !TypeIsDouble<T>::value ) throw std::domain_error("Les Element de point sont float ou double");
+	m_x = x;
+	m_y = y;
+}
+#endif
