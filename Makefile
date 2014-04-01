@@ -32,7 +32,6 @@ all:	$(EXEC)
 #On crée les objets à partir des source, 
 #On ajoute une dépendence avec le fichiers d'entête correspondant.
 bin/%.o: src/%.cpp src/%.h
-	echo "on est la"
 		$(CC) $(CXXFLAGS) $@ $<
 		
 #Meme chose qu'au dessu sauf qu'on compile quand meme si le source n'a pas d'entête.
