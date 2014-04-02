@@ -36,7 +36,7 @@ bin/%.o: src/%.cpp
 		$(CC) $(CXXFLAGS) $@ $<
 
 #Liaison :
-testPoint: bin/testPoint.o bin/Point.o 
+testPoint: bin/testPoint.o bin/Point.o bin/Triangle.o bin/Maillage.o
 	$(CC) $(LFLAGS) -o $@ $^
 
 .PHONY: clean

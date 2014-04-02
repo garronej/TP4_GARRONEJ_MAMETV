@@ -11,8 +11,7 @@
 #include <cassert> //Pour les assert.
 #include <stdexcept>
 
-template <typename T>
-class Point{
+template <typename T> class Point{
 	public :
 
 		/*! 
@@ -21,7 +20,7 @@ class Point{
 		 *Initialise le point a (0,0).
 		 *
 		 */
-		Point(): m_x((T)0), m_y((T)0){};
+		//Point(): m_x((T)0), m_y((T)0){};
 		/*! 
 		 *\brief Constructeur 
 		 *
@@ -30,13 +29,13 @@ class Point{
 		 * Le type T doit être double ou int.
 		 *
 		 */
-		Point(T x,T y);
+		Point(T x, T y);
 
 		/*! 
 		 *\brief Destructeur
 		 *
 		 */
-		~Point(){};
+		//~Point(){};
 
 		/*! 
 		 *\brief x
@@ -63,6 +62,7 @@ class Point{
 };
 
 /* IMPLEMENTAITION */
+using namespace std;
 
 template< typename T > struct TypeIsFloat{ static const bool value = false; };
 template< typename T > struct TypeIsDouble{ static const bool value = false; };
@@ -71,7 +71,7 @@ template<> struct TypeIsFloat< float >{ static const bool value = true; };
 template<> struct TypeIsDouble< double >{ static const bool value = true; };
 
 template<typename T> Point<T>::Point(T x,T y){
-	if ( !TypeIsFloat<T>::value && !TypeIsDouble<T>::value ) throw std::domain_error("Les Element de point sont float ou double");
+	if ( !TypeIsFloat<T>::value && !TypeIsDouble<T>::value ) throw domain_error("Les Element de point sont float ou double");
 	m_x = x;
 	m_y = y;
 }

@@ -2,15 +2,19 @@
  * \file test.cpp
  * \brief Fichier de tests unitaires.
  * \author GARRONE Joseph, joseph.garrone@ensimag.grenoble-inp.fr
- * \version 0.1
- */
+ * \version 0.1 */
 
 #define EXIT_SUCCESS 0
 #include <iostream> //std::cout, std::cin 
-#include <exception>
-#include <cassert>
+#include <exception> //pour les exception
+#include <cassert> //Pour les assert
+
+#include <vector>
+#include <list>
 
 #include "Point.h"
+#include "Triangle.h"
+#include "Maillage.h"
 
 using namespace std;
 
@@ -20,9 +24,6 @@ int main ( int argc, char *argv[] ) {
 	Point<float> P(3.5, 4.4);
 
 	assert(P.x() ==(float)3.5);
-	cout << "PASS" << endl;
-
-
 	assert(P.y() == (float)4.4);
 	cout << "PASS" << endl;
 
@@ -31,8 +32,6 @@ int main ( int argc, char *argv[] ) {
 
 
 	assert(M.x() == (double)3.4);
-	cout << "PASS" << endl;
-
 	assert(M.y() == (double)7.4);
 	cout << "PASS" << endl;
 
@@ -42,6 +41,26 @@ int main ( int argc, char *argv[] ) {
 	}catch( exception &e){
 	       	cout << "PASS" << endl;
 	}
+
+	Triangle<double> T(Point<double>(0,1),Point<double>(1,0), M);
+	assert(T.p1().x() == (double)0);
+	assert(T.p1().y() == (double)1);
+	assert(T.p2().x() == (double)1);
+	assert(T.p2().y() == (double)0);
+	assert(T.p3().x() == (double)3.4);
+	assert(T.p3().y() == (double)7.4);
+	cout << "PASS" << endl;
+
+	Maillage<double, vector> Mv(1,1, Point<double>(0,0));
+
+	cout << "Mv" << endl;
+	cout << Mv;
+
+
+	Maillage<double, list> Ml(1,1, Point<double>(0,0));
+	
+	cout << "Ml" << endl;
+	cout << Ml << endl;
 
 	return EXIT_SUCCESS;
 }
