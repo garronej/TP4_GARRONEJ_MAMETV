@@ -59,6 +59,9 @@ template <typename T> class Point{
 
 		bool operator == (const Point<T> &other ) const;
 
+		void transformer( T m11, T m12, T m21, T m22);
+		void deplacer( T dx, T dy);
+
 	private :
 		T m_x;
 		T m_y;
@@ -85,4 +88,15 @@ bool Point<T>::operator == (const Point<T> &other ) const{
 	return m_x==other.x() && m_y==other.y();
 }
 
+template<typename T> 
+void Point<T>::transformer( T m11, T m12, T m21, T m22){
+	m_x = m_x * m11 + m_y * m21; 
+	m_y = m_x * m12 + m_y * m22; 
+}
+
+template<typename T> 
+void Point<T>::deplacer( T dx, T dy){
+	m_x = m_x + dx; 
+	m_y = m_x + dy; 
+}
 #endif

@@ -82,11 +82,37 @@ int main ( int argc, char *argv[] ) {
 	assert(P1 == P2);
 	cout << "PASS" << endl;
 
-	Maillage<float, list> M1(1,1, Point<float>(0,0));
-	Maillage<float, list> M2(1,1, Point<float>(1,0));
+	Maillage<float, list> M1(10,10, Point<float>(0,0));
+	Maillage<float, list> M2(10,10, Point<float>(11,1));
 	M2.fusioner(M1);
 	ofile.open("./generated/3.dat");
 	ofile << M2;
+	ofile.close();
+
+
+	Maillage<double, list> M3(Point<double>(2,3), Point<double>(5,6), Point<double>(3,8), Point<double>(0,5), 2,3);
+	ofile.open("./generated/4.dat");
+	ofile << M3;
+	ofile.close();
+
+
+	///*Rotate*/
+	//Maillage<double, list> M5(10,10, Point<double>(0,0));
+	//M5.tourner((double)3.14, Point<double>(0,0));
+	//ofile.open("./generated/5.dat");
+	//ofile << M5;
+	//ofile.close();
+
+	/*Deplacer*/
+	Maillage<double, list> M6(10,10, Point<double>(0,0));
+
+	ofile.open("./generated/6prev.dat");
+	ofile << M6;
+	ofile.close();
+
+	M6.deplacer(5,4);
+	ofile.open("./generated/6.dat");
+	ofile << M6;
 	ofile.close();
 
 	return EXIT_SUCCESS;
