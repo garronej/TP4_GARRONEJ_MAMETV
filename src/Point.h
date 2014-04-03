@@ -20,7 +20,7 @@ template <typename T> class Point{
 		 *Initialise le point a (0,0).
 		 *
 		 */
-		//Point(): m_x((T)0), m_y((T)0){};
+		Point(): m_x((T)0), m_y((T)0){};
 		/*! 
 		 *\brief Constructeur 
 		 *
@@ -56,6 +56,9 @@ template <typename T> class Point{
 
 		T y() const{ return m_y; };
 
+
+		bool operator == (const Point<T> &other ) const;
+
 	private :
 		T m_x;
 		T m_y;
@@ -75,4 +78,11 @@ template<typename T> Point<T>::Point(T x,T y){
 	m_x = x;
 	m_y = y;
 }
+
+template<typename T> 
+bool Point<T>::operator == (const Point<T> &other ) const{
+	if( this == &other )return true;
+	return m_x==other.x() && m_y==other.y();
+}
+
 #endif
