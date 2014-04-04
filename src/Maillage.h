@@ -101,20 +101,21 @@ Maillage<T,C>::Maillage(const Point<T> &p1, const Point<T> &p2, const Point<T> &
 	m_data.assign(2*n*m, Triangle<T>() );
 	typename C< Triangle<T> >::iterator it = m_data.begin();
 
-	for( T x = p1.x(); x < p1.x()+m; x++){
-		for( T y = p1.y(); y < p1.y()+n; y++){
+	for( T x = 0; x < m; x++){
+		for( T y = 0; y < n; y++){
 			*(it++) = Triangle<T>(Point<T>(x,y), Point<T>(x,y+1),Point<T>(x+1,y));
 			*(it++) = Triangle<T>(Point<T>(x+1,y+1), Point<T>(x,y+1),Point<T>(x+1,y));
 		}
 	}
 
-	T P1P2_2 = ( p2.x() - p1.x() )*( p2.x() - p1.x() ) + ( p2.y() - p1.y() )*( p2.y() - p1.y() );
-	T P2P3_2 = ( p3.x() - p2.x() )*( p3.x() - p2.x() ) + ( p3.y() - p2.y() )*( p3.y() - p2.y() );
-	T P3P4_2 = ( p4.x() - p3.x() )*( p4.x() - p3.x() ) + ( p4.y() - p3.y() )*( p4.y() - p3.y() );
-	T P1P4_2 = ( p4.x() - p1.x() )*( p4.x() - p1.x() ) + ( p4.y() - p1.y() )*( p4.y() - p1.y() );
+	T P1P2_2 = pow( p2.x() - p1.x(),2 ) + pow( p2.y() - p1.y(),2 );
+	T P2P3_2 = pow( p3.x() - p2.x(),2 ) + pow( p3.y() - p2.y(),2 );
+	T P3P4_2 = pow( p4.x() - p3.x(),2 ) + pow( p4.y() - p3.y(),2 );
+	T P1P4_2 = pow( p4.x() - p1.x(),2 ) + pow( p4.y() - p1.y(),2 );
 	T P1P2xP1P4 = ( p2.x() - p1.x() ) * ( p4.x() - p1.x() ) + ( p2.y() - p1.y() ) * ( p4.y() - p1.y() );
 	if( !( P1P2xP1P4 == 0 && P1P2_2 == P3P4_2 && P2P3_2 == P1P4_2 )) throw domain_error("Les Points ne formes pas un réctangle");
-	transformer( sqrt(P1P2_2)/m, 0, sqrt(P1P4_2)/n, 0);
+
+	transformer( sqrt(P1P2_2)/m, 0, 0, sqrt(P1P4_2)/n);
 	T a = ( p2.x() - p1.x() )/ sqrt(P1P2_2);
 	T b = ( p2.y() - p1.y() )/ sqrt(P1P2_2);
 	transformer( a, -b, b, a);
@@ -135,7 +136,6 @@ ostream & operator<<( ostream &str, const Maillage<T,C> &M){
 
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C>
 void Maillage<T,C>::fusioner( const Maillage<T,C>& m){
-
 	//Pour Tous les point dans m.m_ends 
 	//On vérifie s'il n'es pas inclu dans un des réctangle de ce maillage.
 	//Point<T> M,P1,P2,P3,P4;
@@ -186,7 +186,7 @@ void Maillage<T,C>::deplacer( T dx, T dy ){
 }
 
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C>
-void tourner( T angle, const Point<T>& pt ){
+void Maillage<T,C>::tourner( T angle, const Point<T>& pt ){
 	deplacer(-pt.x(),-pt.y());
 	transformer( cos(angle),-sin(angle),sin(angle),cos(angle));
 	deplacer(pt.x(),pt.y());

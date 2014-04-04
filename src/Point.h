@@ -90,13 +90,18 @@ bool Point<T>::operator == (const Point<T> &other ) const{
 
 template<typename T> 
 void Point<T>::transformer( T m11, T m12, T m21, T m22){
-	m_x = m_x * m11 + m_y * m21; 
-	m_y = m_x * m12 + m_y * m22; 
+	T x = m_x;
+	T y = m_y;
+	m_x = x * m11 + y * m12; 
+	m_y = x * m21 + y * m22; 
 }
 
 template<typename T> 
 void Point<T>::deplacer( T dx, T dy){
-	m_x = m_x + dx; 
-	m_y = m_x + dy; 
+	T x = m_x;
+	T y = m_y;
+
+	m_x = x + dx; 
+	m_y = y + dy; 
 }
 #endif

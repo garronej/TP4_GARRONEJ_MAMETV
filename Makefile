@@ -23,7 +23,7 @@ CXXFLAGS          = -c -g -Wall -o  #Compilation
 LFLAGS          = -g #Liaison
 
 #Executable a construir
-EXEC=testPoint
+EXEC=testGeneral testParam
 
 $(shell mkdir -p bin)
 
@@ -36,7 +36,9 @@ bin/%.o: src/%.cpp
 		$(CC) $(CXXFLAGS) $@ $<
 
 #Liaison :
-testPoint: bin/testPoint.o bin/Point.o bin/Triangle.o bin/Maillage.o
+testGeneral: bin/testGeneral.o bin/Point.o bin/Triangle.o bin/Maillage.o
+	$(CC) $(LFLAGS) -o $@ $^
+testParam: bin/testParam.o bin/Point.o bin/Triangle.o bin/Maillage.o
 	$(CC) $(LFLAGS) -o $@ $^
 
 .PHONY: clean

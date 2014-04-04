@@ -4,7 +4,7 @@
 gnuplot <<EOF
 set term png
 set output "out.png"
-plot [-0.2:25.2][-0.2:25.2] "$1" w l
+plot [1.8:7.2][2.8:6.2] "$1" w l
 EOF
 gnome-open out.png
 
