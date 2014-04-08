@@ -21,10 +21,10 @@
  *\brief Maillage réctangulaire.
  *
  * Deux paramètre template :
- * 1er : Définie la présisiopn de définition des points : double ou float
- * 2e : Conteuneur stl pour stroker les triangle commposant le maillage.
- * 	Le choix de du contener n'a d'effet que sur les performance.
- * 	On ne peux passer que des séquence container les trillangle n'étant pas assosier a une clef.
+ * 1er : Définie la précision de définition des points : double ou float
+ * 2e : Conteneur stl pour stoker les triangle composant le maillage.
+ * 	Le choix de du conteneur n'a d'effet que sur les performance.
+ * 	On ne peux passer que des séquence container les triangle n'étant pas associer a une clef.
  * 	std::vector, std::list, std::deque, std::forwrd_list
  *Ex de construction: Maillage< double, std:list > M(3, 4, Point(0, 0) )
  * 
@@ -32,9 +32,9 @@
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C> class Maillage{
 
 	private :
-		C< Triangle<T> > m_data; /*!< Contener des triangles.  */
+		C< Triangle<T> > m_data; /*!< Conteneur des triangles.  */
 
-		//std::list< std::vector< Point<T> > > m_ends; /*!< List de vecteur de 4 points délimitant les maillages.*/
+		//std::list< std::vector< Point<T> > > m_ends; /*!< Lits de vecteur de 4 points délimitant les maillages.*/
 	public : 
 
 		/*! 
@@ -42,11 +42,20 @@ template< typename T, template< typename=Triangle<T>, typename=std::allocator< T
 		 *
 		 *Construit un maillage de triangle.
 		 *
-		 *\param 
+		 *\param int m, int n, const Point<T>& origine
 		 *
-		 *\return
 		 */
 		Maillage(int m, int n, const Point<T>& origine);
+
+
+		/*! 
+		 *\brief Constructeur 
+		 *
+		 *Constructeur d'un maillage de triangle a partir d'un rectangle quelconque.
+		 *
+		 *\param const Point<T> &p1, const Point<T> &p2, const Point<T> &p3, const Point<T> &p4, int m, int n
+		 *
+		 */
 		Maillage(const Point<T> &p1, const Point<T> &p2, const Point<T> &p3, const Point<T> &p4, int m, int n);
 
 		/*! 
@@ -54,35 +63,90 @@ template< typename T, template< typename=Triangle<T>, typename=std::allocator< T
 		 *
 		 *Test rigoureux de non superposition
 		 *
-		 *Permet de fusioner deux maillage qui ne se recouvre pas.
+		 *Permet de fusionner deux maillage qui ne se recouvre pas.
 		 *
 		 *\param const Maillage<T,C>& m
 		 *
 		 */
-		void fusioner( const Maillage<T,C>& m);
+		void fusionner( const Maillage<T,C>& m);
 
+
+		/*! 
+		 *\brief Transformation linéaire quelconque.
+		 *
+		 *On applique la transformation codé par une matrice carré a tous les points du maillage?
+		 *
+		 *\param  T m11, T m12, T m21, T m22
+		 *
+		 */
 		void transformer( T m11, T m12, T m21, T m22);
+
+
+		/*! 
+		 *\brief Déplacement du maillage.
+		 *
+		 *Translation sur le plan
+		 *
+		 *\param  T dx, T dy 
+		 *
+		 */
 		void deplacer( T dx, T dy );
+
+
+		/*! 
+		 *\brief Rotation 
+		 *
+		 *Rotation du maillage autour d'un point
+		 *
+		 *\param T angle, const Point<T>& pt 
+		 *
+		 */
 		void tourner( T angle, const Point<T>& pt );
 
+
+
+		/*! 
+		 *\brief beginiter
+		 *
+		 *Récupération d'un itérateur constant sur les triangle que constitue le maillage
+		 *celui ci pointe sur le premier élément de la structure.
+		 *
+		 *\return typename C< Triangle<T> >::const_iterator
+		 *
+		 */
 		typename C< Triangle<T> >::const_iterator beginiter() const{ return m_data.begin(); };
+
+
+
+		/*! 
+		 *\brief endiniter
+		 *
+		 *Récupération d'un itérateur constant sur les triangle que constitue le maillage
+		 *celui ci pointe sur le dernier élément de la structure.
+		 *
+		 *\return typename C< Triangle<T> >::const_iterator
+		 *
+		 */
 		typename C< Triangle<T> >::const_iterator enditer() const { return m_data.end(); };
 
 };
 /*  Implémentation */
+
 using namespace std;
 
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C>
 Maillage<T,C>::Maillage(int m, int n, const Point<T>& origine ){
 
-	//	vector< Point<T> > end1(4, Point<T>());
-	//	end1[0] = origine;
-	//	end1[1] = Point<T>(origine.x() +m, origine.y());
-	//	end1[2] = Point<T>(origine.x() +m , origine.y() +n);
-	//	end1[3] = Point<T>(origine.x() , origine.y() + n);
-	//
-	//	m_ends.assign(1, end1);
+	//J'utilisais cela pour le calcul de superposition dans fusionner.
+#if  0     /* ----- #if 0 : If0Label_1 ----- */
+	vector< Point<T> > end1(4, Point<T>());
+	end1[0] = origine;
+	end1[1] = Point<T>(origine.x() +m, origine.y());
+	end1[2] = Point<T>(origine.x() +m , origine.y() +n);
+	end1[3] = Point<T>(origine.x() , origine.y() + n);
 
+	m_ends.assign(1, end1);
+#endif     /* ----- #if 0 : If0Label_1 ----- */
 
 	m_data.assign(2*n*m, Triangle<T>() );
 	typename C< Triangle<T> >::iterator it = m_data.begin();
@@ -98,6 +162,7 @@ Maillage<T,C>::Maillage(int m, int n, const Point<T>& origine ){
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C>
 Maillage<T,C>::Maillage(const Point<T> &p1, const Point<T> &p2, const Point<T> &p3, const Point<T> &p4, int m, int n) {
 
+	//1) On crée un maillage.
 	m_data.assign(2*n*m, Triangle<T>() );
 	typename C< Triangle<T> >::iterator it = m_data.begin();
 
@@ -108,17 +173,24 @@ Maillage<T,C>::Maillage(const Point<T> &p1, const Point<T> &p2, const Point<T> &
 		}
 	}
 
+	//On vérifie que les point passer en paramètre forment bien un rectangle.
 	T P1P2_2 = pow( p2.x() - p1.x(),2 ) + pow( p2.y() - p1.y(),2 );
 	T P2P3_2 = pow( p3.x() - p2.x(),2 ) + pow( p3.y() - p2.y(),2 );
 	T P3P4_2 = pow( p4.x() - p3.x(),2 ) + pow( p4.y() - p3.y(),2 );
 	T P1P4_2 = pow( p4.x() - p1.x(),2 ) + pow( p4.y() - p1.y(),2 );
 	T P1P2xP1P4 = ( p2.x() - p1.x() ) * ( p4.x() - p1.x() ) + ( p2.y() - p1.y() ) * ( p4.y() - p1.y() );
-	if( !( P1P2xP1P4 == 0 && P1P2_2 == P3P4_2 && P2P3_2 == P1P4_2 )) throw domain_error("Les Points ne formes pas un réctangle");
+	if( !( P1P2xP1P4 == 0 && P1P2_2 == P3P4_2 && P2P3_2 == P1P4_2 )) throw domain_error("Les Points ne formes pas un v rectangle");
 
+	//2) On lui applique un homothétie pour le mètre a la taille voulue.
 	transformer( sqrt(P1P2_2)/m, 0, 0, sqrt(P1P4_2)/n);
+
+
+	//On lui applique une rotation pour l'oriente correctement.
 	T a = ( p2.x() - p1.x() )/ sqrt(P1P2_2);
 	T b = ( p2.y() - p1.y() )/ sqrt(P1P2_2);
 	transformer( a, -b, b, a);
+
+	//On le translate pour qu'il occupe la position escompté.
 	deplacer( p1.x(), p1.y() );
 }
 
@@ -135,37 +207,42 @@ ostream & operator<<( ostream &str, const Maillage<T,C> &M){
 }
 
 template< typename T, template< typename=Triangle<T>, typename=std::allocator< Triangle<T> > > class C>
-void Maillage<T,C>::fusioner( const Maillage<T,C>& m){
-	//Pour Tous les point dans m.m_ends 
-	//On vérifie s'il n'es pas inclu dans un des réctangle de ce maillage.
-	//Point<T> M,P1,P2,P3,P4;
-	//T P1MxP1P2, P1P2_2, P1MxP1P4, P1P4_2;
-	//bool sup;
+void Maillage<T,C>::fusionner( const Maillage<T,C>& m){
 
-	//for( typename list< vector< Point<T> > >::const_iterator itM = m.m_ends.begin(); itM!=m.m_ends.end(); itM++){
 
-	//	for( int i=0; i<4; i++){
-	//		M = (*itM)[i];
-	//		sup = true;
-	//		for( typename list< vector<Point<T> > >::iterator it = m_ends.begin(); it!=m_ends.end(); it++){
-	//			P1 = (*it)[0];
-	//			P2 = (*it)[1];
-	//			P3 = (*it)[2];
-	//			P4 = (*it)[3];
+	//Le calcule de la non superposition, compte tenu du fait qu'il peut y avoir plusieurs maillage dans un maillage
+	//qu'il peuvent être orienté et positionner n'importe comment constitue une tache très compliquer a effectuer.
+	//Le code suivant devrais permettre de le calculer cependant je choisie de ne pas m'atteler a la lourde tache de 
+	//tester les différentes configuration et commente par prudence.
 
-	//			P1MxP1P2 =(M.x()-P1.x())*(P2.x()-P1.x())+(M.y()-P1.y())*(P2.y()-P1.y());
-	//			P1P2_2 = (P2.x()-P1.x())*(P2.x()-P1.x())+(P2.y()-P1.y())*(P2.y()-P1.y());
-	//			P1MxP1P4 =(M.x()-P1.x())*(P4.x()-P1.x())+(M.y()-P1.y())*(P4.y()-P1.y());
-	//			P1P4_2 = (P4.x()-P1.x())*(P4.x()-P1.x())+(P4.y()-P1.y())*(P4.y()-P1.y());
 
-	//			if( 0< P1MxP1P2 && P1MxP1P2<P1P2_2 && 0<P1MxP1P4 && P1MxP1P4<P1P4_2) throw domain_error("Superposition");
+#if  0     /* ----- #if 0 : If0Label_2 ----- */
+	for( typename list< vector< Point<T> > >::const_iterator itM = m.m_ends.begin(); itM!=m.m_ends.end(); itM++){
 
-	//			sup = sup && ( M == P1 || M == P2 || M == P3 || M == P4 );
-	//		}
-	//		if( sup ) throw domain_error("Superposition complète de deux maillage");
-	//	}
-	//}
+		for( int i=0; i<4; i++){
+			M = (*itM)[i];
+			sup = true;
+			for( typename list< vector<Point<T> > >::iterator it = m_ends.begin(); it!=m_ends.end(); it++){
+				P1 = (*it)[0];
+				P2 = (*it)[1];
+				P3 = (*it)[2];
+				P4 = (*it)[3];
+
+				P1MxP1P2 =(M.x()-P1.x())*(P2.x()-P1.x())+(M.y()-P1.y())*(P2.y()-P1.y());
+				P1P2_2 = (P2.x()-P1.x())*(P2.x()-P1.x())+(P2.y()-P1.y())*(P2.y()-P1.y());
+				P1MxP1P4 =(M.x()-P1.x())*(P4.x()-P1.x())+(M.y()-P1.y())*(P4.y()-P1.y());
+				P1P4_2 = (P4.x()-P1.x())*(P4.x()-P1.x())+(P4.y()-P1.y())*(P4.y()-P1.y());
+
+				if( 0< P1MxP1P2 && P1MxP1P2<P1P2_2 && 0<P1MxP1P4 && P1MxP1P4<P1P4_2) throw domain_error("Superposition");
+
+				sup = sup && ( M == P1 || M == P2 || M == P3 || M == P4 );
+			}
+			if( sup ) throw domain_error("Superposition complète de deux maillage");
+		}
+	}
 	//for( typename list< vector< Point<T> > >::const_iterator itM = m.m_ends.begin(); itM!=m.m_ends.end(); itM++) m_ends.push_back( (*itM) );
+#endif     /* ----- #if 0 : If0Label_2 ----- */
+
 	for( typename C< Triangle< T > >::const_iterator it = m.beginiter(); it != m.enditer(); it++) m_data.push_back( *it );
 
 }

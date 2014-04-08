@@ -63,8 +63,8 @@ template <typename T> class Point{
 		void deplacer( T dx, T dy);
 
 	private :
-		T m_x;
-		T m_y;
+		T m_x; /*!< Premier point*/
+		T m_y; /*!< Deuxiemme point*/
 };
 
 /* IMPLEMENTAITION */

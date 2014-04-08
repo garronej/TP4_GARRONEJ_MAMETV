@@ -28,10 +28,14 @@ int main ( int argc, char *argv[] ) {
 
 	if ( atoi(argv[3]) == 1){
 		cout << "list" << endl;
-		Maillage<float,list> M(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), m, n);
+		Maillage<float,list> M(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), m/4, n);
+		Maillage<float,list> N(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), 2*m, n);
+		M.fusionner(N);
 	}else{
 		cout << "vector" << endl;
-		Maillage<float,vector> M(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), m, n);
+		Maillage<float,vector> M(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), m/4, n);
+		Maillage<float,vector> N(Point<float>(2,3), Point<float>(5,6), Point<float>(3,8), Point<float>(0,5), 2*m, n);
+		M.fusionner(N);
 	}
 
 

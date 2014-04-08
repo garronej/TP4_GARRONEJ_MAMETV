@@ -8,26 +8,55 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 #include "Point.h"
+
+
+
+/*! 
+ *\class  Triangle
+ *
+ *\brief structure constituer de trois points.
+ *
+ */
 template< typename T> class Triangle{
 	public :
 		Triangle(): m_p1(0,0), m_p2(0,0), m_p3(0,0) {};
 		Triangle(Point<T> p1, Point<T> p2, Point<T> p3): m_p1(p1), m_p2(p2), m_p3(p3) {};
 
-		Point<T> p1() const { return m_p1; };
+		Point<T> p1() const { return m_p1; }; 
 		Point<T> p2() const { return m_p2; };
 		Point<T> p3() const { return m_p3; };
 
+		
+/*! 
+ *\brief display
+ *
+ *Affiche les trois points.
+ *
+ */
 		void display() const;
 
+
+/*! 
+ *\brief transformer
+ *
+ * Applique une transformation linéaire a chacun des points.
+ *
+ *\param T m11, T m12, T m21, T m22
+ *
+ *Les paramètres sont les coefficient de la matrice 2x2 qui codent 
+ *la transformation.
+ *
+ */
 		void transformer( T m11, T m12, T m21, T m22);
 		void deplacer( T dx, T dy );
 
 	private :
-		Point<T> m_p1;
-		Point<T> m_p2;
-		Point<T> m_p3;
+		Point<T> m_p1; /*!<Premier point */
+		Point<T> m_p2; /*!<Deuxiemme point */
+		Point<T> m_p3; /*!<Troisième point */
 };
 
+/*Implémentation*/
 
 template< typename T>
 void Triangle< T >::display() const{
@@ -43,7 +72,6 @@ void Triangle<T>::transformer( T m11, T m12, T m21, T m22){
 	m_p2.transformer(m11, m12, m21, m22);
 	m_p3.transformer(m11, m12, m21, m22);
 }
-
 
 template< typename T>
 void Triangle<T>::deplacer( T dx, T dy){

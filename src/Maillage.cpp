@@ -6,3 +6,8 @@
  */
 
 #include "Maillage.h"
+
+/* Le compilateur g++ ne reconnaissant pas les .ttc 
+ * Et parce que je ne sait pas comment est construit le makefile
+ * de vos algorithme de vérification je choisit de placé l'implémentation
+ * dans les .h comme il est d'usage plutôt que d'utiliser clang++ */

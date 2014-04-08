@@ -84,7 +84,7 @@ int main ( int argc, char *argv[] ) {
 
 	Maillage<float, list> M1(10,10, Point<float>(0,0));
 	Maillage<float, list> M2(10,10, Point<float>(11,1));
-	M2.fusioner(M1);
+	M2.fusionner(M1);
 	ofile.open("./generated/3.dat");
 	ofile << M2;
 	ofile.close();
